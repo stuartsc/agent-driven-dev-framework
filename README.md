@@ -14,10 +14,35 @@ This framework enables AI coding agents (Claude Code, Cursor, Windsurf, etc.) to
 
 ## Framework Components
 
+### 🚨 [PROTOCOL.md](./PROTOCOL.md) - **READ THIS FIRST**
+**MANDATORY** session protocol and checklist for all agents.
+
+**Critical requirements:**
+- Session checklist that MUST be followed every time
+- Enforcement mechanisms to prevent common failures
+- Recovery procedures for protocol violations
+- Git workflow with smart commits reference
+- Integration with HISTORY.md for session continuity
+
+**Why it exists:** Agents consistently forget protocols. This file uses multiple enforcement layers to make compliance automatic.
+
+### 📜 [HISTORY.md](./HISTORY.md)
+Living document tracking all development sessions and project evolution.
+
+**Contains:**
+- Current project status and active work
+- "Up Next" section with recommended tasks
+- Session-by-session log of all work done
+- Blockers, technical debt, and key decisions
+- Handoff documentation between agents/developers
+
+**Critical for:** Session continuity, agent handoffs, understanding project evolution.
+
 ### 📋 [AGENTS.md](./AGENTS.md)
 Universal AI agent configuration file following the AGENTS.md standard (adopted by 40,000+ projects).
 
 **Key sections:**
+- **MANDATORY PROTOCOL REFERENCE** (first section - points to PROTOCOL.md)
 - Agentic workflow patterns (Sequential, Planning, Parallelization, Orchestrator-Worker)
 - Requirements elicitation process with multi-agent collaboration
 - Jira integration via Model Context Protocol (MCP)
@@ -49,22 +74,38 @@ Practical, copy-paste ready workflow templates and examples.
 
 ## Quick Start
 
-### 1. Copy Framework Files
+### 1. Clone and Setup
+```bash
+# Clone the repository
+git clone https://github.com/stuartsc/agent-driven-dev-framework.git
+cd agent-driven-dev-framework
+
+# Run protocol setup (installs git hooks)
+./setup-protocol.sh
+```
+
+### 2. Copy Framework Files to Your Project
 ```bash
 # Copy these files to your project root
 AGENTS.md
 PROJECT.md
 WORKFLOWS.md
+PROTOCOL.md
+HISTORY.md
+verify-protocol.sh
+setup-protocol.sh
+hooks/pre-commit
+.claude/prompts/session-start.md
 ```
 
-### 2. Configure for Your Project
+### 3. Configure for Your Project
 Update the following in each file:
 - Replace `PROJ` with your Jira project key
 - Update team names and member lists
 - Adjust workflow state names to match your Jira workflow
 - Customize branch naming conventions if needed
 
-### 3. Set Up Integrations
+### 4. Set Up Integrations
 
 **Jira Setup:**
 1. Create Jira project with your project key
@@ -83,8 +124,70 @@ Update the following in each file:
 2. Configure authentication
 3. Test integration with sample commands
 
-### 4. Start Development
-Follow the workflows in PROJECT.md Phase 5 for daily development cycles.
+### 5. Start Development
+**IMPORTANT:** Before coding, EVERY agent must:
+1. Read PROTOCOL.md completely
+2. Copy session checklist to working notes
+3. Read HISTORY.md for current status and "Up Next" tasks
+4. Follow daily workflows in PROJECT.md Phase 5
+
+## Protocol Enforcement
+
+**The #1 problem with AI agents: They forget to follow protocols.**
+
+This framework solves that with **multiple enforcement layers**:
+
+### Layer 1: File Naming & Discovery
+- **PROTOCOL.md** comes alphabetically first
+- **AGENTS.md** first section points to PROTOCOL.md
+- Impossible to miss when listing files
+
+### Layer 2: Session Start Prompt
+- `.claude/prompts/session-start.md` auto-loads on session start (Claude Code)
+- Forces protocol awareness before any work begins
+- Provides checklist reminder
+
+### Layer 3: Git Hooks
+```bash
+# Pre-commit hook verifies:
+- Jira key in branch name
+- Jira key in commit message
+- HISTORY.md recently updated
+- No uncommitted work
+
+# Install hooks:
+./setup-protocol.sh
+```
+
+### Layer 4: Verification Script
+```bash
+# Run before committing to verify compliance:
+./verify-protocol.sh
+
+# Checks:
+✅ HISTORY.md updated
+✅ Branch name has Jira key
+✅ Recent commits have Jira keys
+✅ No uncommitted changes
+✅ Required files exist
+```
+
+### Layer 5: HISTORY.md Integration
+- "Up Next" section tells agents what to work on
+- Session log provides continuity
+- Blockers are visible immediately
+- Technical debt is tracked
+
+### Why Multiple Layers?
+
+**Single reminders don't work.** Agents need:
+- **Visual cues** (file naming, emoji markers)
+- **Automatic prompts** (session-start.md)
+- **Forced compliance** (git hooks)
+- **Easy verification** (verify-protocol.sh)
+- **Context persistence** (HISTORY.md)
+
+Together, these make protocol compliance **automatic**, not optional.
 
 ## Key Features
 

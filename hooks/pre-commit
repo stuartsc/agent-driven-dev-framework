@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Pre-commit hook to enforce protocol compliance
+# This hook runs automatically before each commit
+
+echo "🔍 Running protocol compliance checks..."
+echo ""
+
+# Run the protocol verification script
+./verify-protocol.sh
+
+# Capture exit code
+VERIFY_EXIT=$?
+
+if [ $VERIFY_EXIT -ne 0 ]; then
+    echo ""
+    echo "❌ Protocol compliance check failed!"
+    echo ""
+    echo "To fix:"
+    echo "  1. Review errors above"
+    echo "  2. Fix issues (see PROTOCOL.md for guidance)"
+    echo "  3. Try committing again"
+    echo ""
+    echo "To bypass (NOT RECOMMENDED):"
+    echo "  git commit --no-verify"
+    echo ""
+    exit 1
+fi
+
+# Additional commit message check
+COMMIT_MSG_FILE="$1"
+if [ -n "$COMMIT_MSG_FILE" ]; then
+    COMMIT_MSG=$(cat "$COMMIT_MSG_FILE" 2>/dev/null || echo "")
+
+    # Check if commit message contains Jira key (unless it's a merge commit or HISTORY update)
+    if ! echo "$COMMIT_MSG" | grep -qE '(^Merge|^Update HISTORY|[A-Z]+-[0-9]+)'; then
+        echo ""
+        echo "❌ Commit message does not contain Jira issue key!"
+        echo ""
+        echo "Format: PROJ-123 #comment Your message here"
+        echo ""
+        echo "See PROTOCOL.md for smart commit syntax."
+        echo ""
+        exit 1
+    fi
+fi
+
+echo ""
+echo "✅ Protocol compliance verified. Proceeding with commit..."
+echo ""
+exit 0

@@ -2,6 +2,27 @@
 
 This file provides guidance to AI coding agents working with this project. It follows the universal AGENTS.md standard adopted by 40,000+ open-source projects and supported by Claude Code, Cursor, Copilot, Windsurf, and other AI development tools.
 
+## 🚨 MANDATORY: READ PROTOCOL FIRST 🚨
+
+**BEFORE doing ANYTHING in this project, you MUST:**
+
+1. ✅ **Read [PROTOCOL.md](./PROTOCOL.md) completely** - This is NON-NEGOTIABLE
+2. ✅ **Copy the session checklist** from PROTOCOL.md into your working notes
+3. ✅ **Read [HISTORY.md](./HISTORY.md)** for current status and "Up Next" tasks
+4. ✅ **Verify you have a Jira issue** for the work you're about to do
+
+**Why this matters:**
+- Without following protocol, your work will not be traceable
+- Other agents/developers will not be able to continue your work
+- Jira and GitHub integration will break
+- You will violate project standards
+
+**This is not a suggestion. This is a requirement.**
+
+**👉 [Go read PROTOCOL.md now](./PROTOCOL.md) 👈**
+
+---
+
 ## Overview
 
 This project follows an **agent-driven development workflow** where AI agents:
